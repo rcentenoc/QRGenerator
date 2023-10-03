@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Generator</title>
+    <!-- Css file -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- QR cdn -->
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="form">
+        <h1>QR Code Generator</h1>
+        <form action="">
+            <!-- input para el texto -->
+            <input type="url" id="website" name="website" placeholder="example.com/example" required>
+            <!-- espacio para el qr -->
+            <div id="qrcode_container">
+                <div class="qrcode" id="qrcode">
+                </div>
+            </div>
+            <!-- boton para generar el qr -->
+            <button type="button" onclick="generateQRCode()">
+                Generate QR Code
+            </button>
+        </form>
+        <button type="button" onclick="downloadQRCode()">
+            Download QR Code
+        </button>
+    </div>
+    <footer>
+        <div>
+            <a href="https://github.com/rcentenoc" target="_blank">
+                <img src="css/github.ico" alt="github">
+            </a>
+        </div>
+    </footer>
+    <!-- script para generar el qr -->
+    <script>
+        // esta función genera el qr
+        function generateQRCode() {
+            let website = document.getElementById("website").value;
+            if (website) {
+                let qrcodeContainer = document.getElementById("qrcode");
+                qrcodeContainer.innerHTML = "";
+                new QRCode(qrcodeContainer, website);
+                document.getElementById("qrcode_container").style.display = "block";
+            } else {
+                alert("Please enter a valid URL");
+            }
+        }
+        // esta función descarga el qr en una imagen png
+        function downloadQRCode(){
+            // obtenemos el qr
+            let qrcodeContainer = document.getElementById("qrcode");
+            // obtenemos la imagen del qr
+            let qrcodeImage = qrcodeContainer.children[0];
+            // creamos un elemento canvas
+            let canvas = document.createElement('canvas');
+            // le damos el tamaño del qr
+            canvas.width = qrcodeImage.width;
+            canvas.height = qrcodeImage.height;
+            // obtenemos el contexto del canvas
+            let context = canvas.getContext('2d');
+            // dibujamos la imagen en el canvas
+            context.drawImage(qrcodeImage, 0, 0);
+            // creamos un elemento a
+            let a = document.createElement('a');
+            // le damos el nombre de la imagen
+            a.download = "QRCode.png";
+            // le damos el link de la imagen
+            a.href = canvas.toDataURL('image/png');
+            // simulamos un click
+            a.click();
+        }
+    </script>
+</body>
+
+</html>
